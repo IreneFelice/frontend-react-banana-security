@@ -8,6 +8,8 @@ import SignUp from './pages/SignUp';
 import './App.css';
 
 function App() {
+    const { isAuth } = useContext(AuthContext);
+
   return (
     <>
       <NavBar />
