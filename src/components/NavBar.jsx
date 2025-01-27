@@ -6,7 +6,7 @@ import { AuthContext } from "../context/AuthContext";
 function NavBar() {
   const navigate = useNavigate();
   const { isAuth } = useContext(AuthContext);
-  const { toggleAuthLogout } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
 
 
 
@@ -22,19 +22,20 @@ function NavBar() {
         </Link>
 
       <div>{
-        isAuth ? (
+          isAuth && (
             <>
             <p>Ingelogd</p>
                 <button
                     type="button"
                     onClick={() => {
-                    toggleAuthLogout();
+                    logout();
                     navigate('/');
                 }}>
                     Uitloggen
                 </button>
             </>
-          ) : (
+          ) }
+          {!isAuth && (
             <>
                 <button
         type="button"
