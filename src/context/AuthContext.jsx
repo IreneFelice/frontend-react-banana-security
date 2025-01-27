@@ -9,27 +9,34 @@ function AuthContextProvider({children}) {
     const [auth, setAuth] = useState({
         isAuth: false,
         user: null,
+        status: 'pending',
     });
 
+    // PERSIST ON REFRESH //
     useEffect(() => {
         //     is er een token?
-        //     is de token nog geldig? Ligt iat nog voor exp?
+        //     is de token nog geldig? Ligt huidige tijd nog voor exp?
         //      ja: gebruikersgegevens opnieuw ophalen, state zetten (login functie)
         const token = localStorage.getItem('token');
-
-        if (token && isTokenValid(token)) {
-            login(token);
+        const decodedToken = jwtDecode(token);
+        if (token && isTokenValid(decodedToken)) {
+            void login(token);
         } else {
+            setAuth({
+                isAuth: false,
+                user: null,
+                status: 'done',
+            });
         }
-        //     nee: dan niks
     }, []);
 
-
+    // LOGIN //
     async function login(token) {
+
         localStorage.setItem('token', token);
         const decodedToken = jwtDecode(token);
         const id = decodedToken.sub;
-        console.log("Gebruiker is ingelogd!")
+        console.log("Gebruiker is ingelogd! Token decoded:", decodedToken)
         try {
             const response = await axios.get(`http://localhost:3000/600/users/${id}`, {
                 headers: {
@@ -44,6 +51,7 @@ function AuthContextProvider({children}) {
                     email: response.data.email,
                     id: response.data.id,
                 },
+                status: 'done',
             });
         } catch (error) {
             console.log(error);
@@ -51,10 +59,12 @@ function AuthContextProvider({children}) {
         }
     }
 
+    // LOGOUT //
     function logout() {
         setAuth({
             isAuth: false,
             user: null,
+            status: 'done',
         });
         console.log("Gebruiker is uitgelogd!");
     }
@@ -68,7 +78,7 @@ function AuthContextProvider({children}) {
 
     return (
         <AuthContext.Provider value={contextData}>
-            {children}
+            {auth.status === 'done' ? children : <p>Loading...</p>}
         </AuthContext.Provider>
     );
 }

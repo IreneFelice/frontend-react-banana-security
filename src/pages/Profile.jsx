@@ -6,7 +6,7 @@ function Profile() {
     const {auth} = useContext(AuthContext);
   return (
     <>
-      <h1>Profielpagina</h1>
+      <h1>Hallo {auth.user.name}!</h1>
       <section>
         <h2>Gegevens</h2>
         <p><strong>Gebruikersnaam:</strong> {auth.user.name}</p>
