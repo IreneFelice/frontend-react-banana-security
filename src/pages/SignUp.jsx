@@ -13,12 +13,11 @@ function SignUp() {
            const response = await axios.post('http://localhost:3000/register', {
                ...inputData
            });
+           navigate('/signin');
+           console.log("gebruiker is geregistreerd");
        } catch (error) {
-           console.error(error);
+           console.error("registreren niet gelukt", error);
        }
-
-        navigate('/signin');
-        console.log("gebruiker is geregistreerd");
     }
 
   return (
@@ -73,6 +72,21 @@ function SignUp() {
                     })}
                 />
                 {errors.password && <p className="formInputError">{errors.password.message}</p>}
+            </label>
+
+            <label htmlFor="fav-color-field">
+                Lievelingskleur:
+                <input
+                    type="text"
+                    id="fav-color-field"
+                    {...register("favcolor", {
+                        required: {
+                            value: true,
+                            message: "Je lievelingskleur? Dit is BELANGRIJK!",
+                        },
+                    })}
+                />
+                {errors.favcolor && <p className="formInputError">{errors.favcolor.message}</p>}
             </label>
 
             <button type="submit">Registreer</button>

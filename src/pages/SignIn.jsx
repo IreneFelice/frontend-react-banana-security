@@ -20,12 +20,13 @@ function SignIn() {
             });
             console.log(response);
             login(response.data.accessToken);
-        } catch (error) {
-            console.error(error);
-        }
 
-        navigate('/profile');
-        console.log("gebruiker is ingelogd");
+            navigate('/profile');
+            console.log("gebruiker is ingelogd");
+        } catch (error) {
+            console.error("inloggen niet gelukt", error);
+
+        }
     }
 
     return (
